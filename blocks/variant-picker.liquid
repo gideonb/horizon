@@ -42,6 +42,35 @@
     },
     {
       "type": "header",
+      "content": "Option availability"
+    },
+    {
+      "type": "paragraph",
+      "content": "Demo: hiding unavailable option values creates form states where the selected value is never rendered."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_invalid_paths",
+      "label": "Hide invalid paths",
+      "info": "Hide option values that have no variant for the current combination (the combination doesn't exist).",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_sold_out_paths",
+      "label": "Hide sold out paths",
+      "info": "Hide option values whose variant exists but can't be purchased.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_js_hack",
+      "label": "Add JS hack",
+      "info": "Naive JS that clicks visible options one at a time until the form lands in a valid state — one server round trip per option.",
+      "default": false
+    },
+    {
+      "type": "header",
       "content": "t:content.appearance"
     },
     {
