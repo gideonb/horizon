@@ -1,0 +1,26 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Notes #
+######################
+/.idea
+todo.md
+
+# Theme CLI #
+######################
+shopify.theme.toml
+
+# Claude #
+######################
+/.claude/settings.local.json
+/.claude/worktrees/
+/.worktree-dev.url
+/.worktree-dev.pid
+/.worktree-dev.log
