@@ -71,6 +71,7 @@
             assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
             assign longest_value = 0
           endif
+
         -%}
 
         {%- if product_option.values.size == 1 and variant_style != 'swatch' -%}
@@ -100,11 +101,22 @@
               {%- endif %}
             </legend>
             {%- for product_option_value in product_option.values -%}
+              {%- liquid
+                # Hide with CSS, not `continue` — a hidden value can still come back `selected`
+                # via ?option_values=, so it stays in the DOM, checked and submitted but invisible
+                assign hide_value = false
+                if block_settings.hide_invalid_paths and product_option_value.available == false and product_option_value.variant == null
+                  assign hide_value = true
+                endif
+                if block_settings.hide_sold_out_paths and product_option_value.available == false and product_option_value.variant != null
+                  assign hide_value = true
+                endif
+              -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
               <label
-                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}{% if hide_value %} variant-option__button-label--unavailable-hidden{% endif %}"
               >
                 <input
                   type="radio"
@@ -205,7 +217,21 @@
                 class="variant-option__select"
               >
                 {%- for product_option_value in product_option.values -%}
+                  {%- liquid
+                    # `hidden` options are selectable by the server but gone from the list —
+                    # a hidden selected value still displays in the closed control
+                    assign hide_value = false
+                    if block_settings.hide_invalid_paths and product_option_value.available == false and product_option_value.variant == null
+                      assign hide_value = true
+                    endif
+                    if block_settings.hide_sold_out_paths and product_option_value.available == false and product_option_value.variant != null
+                      assign hide_value = true
+                    endif
+                  -%}
                   <option
+                    {% if hide_value %}
+                      hidden
+                    {% endif %}
                     value="{{ product_option_value | escape }}"
                     data-input-id="{{ product_option.position }}-{{ forloop.index0 }}"
                     data-option-name="{{ product_option.name | escape }}"
@@ -242,6 +268,9 @@
       </script>
     </form>
   </variant-picker>
+  {% if block_settings.enable_js_hack %}
+    <script src="{{ 'variant-selection-hack.js' | asset_url }}" defer></script>
+  {% endif %}
 {% endunless %}
 
 {% render 'swatch-styles' %}

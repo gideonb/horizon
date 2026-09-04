@@ -151,6 +151,7 @@
               # Single pass; stop once variant and media are known.
               if first_available_variant == blank or featured_media == blank
                 for variant in product_resource.variants
+                  # here
                   if variant.available and variant[swatch_option_key] == product_option_value.name
                     if first_available_variant == blank
                       assign first_available_variant = variant
